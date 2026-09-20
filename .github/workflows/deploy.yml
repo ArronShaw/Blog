@@ -1,4 +1,4 @@
-name: Build and deploy Hugo site
+name: Deploy Hugo site
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v5
         with:
           submodules: recursive
           fetch-depth: 0
@@ -36,12 +36,12 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
-      - name: Build with Hugo
+      - name: Build
         env:
           HUGO_ENVIRONMENT: production
           HUGO_ENV: production
+        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
-          run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
